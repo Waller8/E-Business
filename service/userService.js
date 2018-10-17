@@ -42,7 +42,7 @@ async function login(user) {
     user.password = encryptUtil.md5Hmac(password, user.username);
 
     user = await User.findOne(user);
-    // user.password = "";     //报错  Cannot set property 'password' of null
+    user.password = "";     //报错  Cannot set property 'password' of null
     return user;
 }
 
