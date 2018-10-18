@@ -13,7 +13,7 @@ async function regist(user) {
         throw Error(`用户名${user.username}已经被占用`);
     }
     //对密码进行加密操作
-    user.password = encryptUtil.md5Hmac(user.username, user.password);
+    user.password = encryptUtil.md5Hmac(user.password, user.username);
     //对角色重新赋值,防止被攻击
     user.role = 0;
     //注册
@@ -31,6 +31,7 @@ async function regist(user) {
  * @returns {Promise<*>}
  */
 async function login(user) {
+
     // 根据用户名检查用户是否存在
     await isExistByUsername(user.username);
     //判断密码有没有传递过来
@@ -40,9 +41,9 @@ async function login(user) {
     }
     //对密码加密
     user.password = encryptUtil.md5Hmac(password, user.username);
-
+    // user = await User.findOne(user);
     user = await User.findOne(user);
-    user.password = "";     //报错  Cannot set property 'password' of null
+    // user.password = "";     //报错  Cannot set property 'password' of null
     return user;
 }
 
