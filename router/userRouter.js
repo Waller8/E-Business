@@ -8,7 +8,7 @@ let router = express.Router();
 /**
  * 用户注册: url : POST , http://localhost:8080/
  */
-router.post("/", async (request, response) => {
+router.post("/regist", async (request, response) => {
     let result = await userService.regist(request.body);
     response.success(result)
 });

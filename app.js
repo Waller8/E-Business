@@ -10,6 +10,7 @@ app.use(require("./middleware/response_md"));
 app.use(morgan("combined"));
 app.use(express.json());
 app.use("/user", require("./router/userRouter"));
+app.use("/category", require("./router/categoryRouter"));
 // 处理全局异常的中间件
 app.use((err, request, response, next) => {
     // 写出失败的响应

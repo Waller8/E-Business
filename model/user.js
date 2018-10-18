@@ -1,5 +1,5 @@
 let mongoose = require("mongoose");
-
+//用户模块
 let schema = new mongoose.Schema({
     username: {
         type: String,
