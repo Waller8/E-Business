@@ -1,7 +1,7 @@
 let config = require("../config");
 let userService = require("../service/userService");
 let express = require("express");
-let encryptUtil = require("../utils/encryptUtil");
+
 
 let router = express.Router();
 
@@ -26,29 +26,18 @@ router.delete("/:username", async (request, response) => {
 router.get("/:username", async (request, response) => {
     let username = request.params.username;
     let result = await userService.findByUsername(username);
-
     if (result) {
-        result.password = "";
         response.success(result)
     } else {
-        throw Error(`用户名为${username}的用户不存在`)
+        response.fail(`用户名为${username}的用户不存在`)
     }
 });
 
 router.post("/login", async (request, response) => {
 
-    let user = await userService.login(request.body);
+    let token = await userService.login(request.body);
 
-    //定义token
-    let token = {
-        username: user.username,
-        expire: Date.now() + config.TOKEN_EXPIRE
-    };
-
-    // 参数1 : 原文
-    // 参数2 : 密钥
-    let aesEncrypt = encryptUtil.aesEncrypt(JSON.stringify(token));
-    response.success(aesEncrypt);
+    response.success(token);
 });
 
 module.exports = router;

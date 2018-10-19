@@ -1,5 +1,6 @@
 let User = require("../model/user");
 let encryptUtil = require("../utils/encryptUtil");
+let config = require("../config");
 
 /**
  * 注册:  url : POST , http://localhost:8080/
@@ -41,10 +42,20 @@ async function login(user) {
     }
     //对密码加密
     user.password = encryptUtil.md5Hmac(password, user.username);
-    // user = await User.findOne(user);
     user = await User.findOne(user);
-    // user.password = "";     //报错  Cannot set property 'password' of null
-    return user;
+
+    if (!user) {
+        throw Error("用户名或密码错误");
+    }
+
+    let token = {
+        username: user.username,
+        expire: Date.now() + config.TOKEN_EXPIRE
+    };
+    // 参数1 : 原文
+    // 参数2 : 密钥
+    let tokenEncrypt = encryptUtil.aesEncrypt(JSON.stringify(token), config.TOKEN_KEY);
+    return tokenEncrypt;
 }
 
 
